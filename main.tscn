@@ -1,0 +1,104 @@
+[gd_scene load_steps=13 format=3 uid="uid://b8wfqpwengt6d"]
+
+[ext_resource type="Script" path="res://scripts/player/PlayerController.cs" id="1_0ehn0"]
+[ext_resource type="Texture2D" uid="uid://dvsamywlr2hft" path="res://assets/character_spacer.png" id="1_t0wtj"]
+[ext_resource type="Script" path="res://scripts/Managers/NodeSpawner.cs" id="1_vi8mo"]
+[ext_resource type="Texture2D" uid="uid://b6qlmc2dn7kkl" path="res://assets/gun_modern.png" id="2_i1ng7"]
+[ext_resource type="Script" path="res://scripts/Weapons/Gun.cs" id="3_bdb65"]
+[ext_resource type="PackedScene" uid="uid://c8aeqoxdlql7p" path="res://Scenes/Projectiles/bullet_base.tscn" id="5_wmnd2"]
+[ext_resource type="Texture2D" uid="uid://dt0tw6vft6xa2" path="res://assets/portal_placeholder.png" id="7_6cwah"]
+[ext_resource type="Texture2D" uid="uid://daeir7u5q74oe" path="res://assets/enemy_placeholder.png" id="8_uab2f"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n5rv6"]
+radius = 7.0
+
+[sub_resource type="Animation" id="Animation_sctlq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/vfx/GunModern:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_83vil"]
+resource_name = "fire"
+length = 0.25
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/vfx/GunModern:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.233333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-4, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0n000"]
+_data = {
+"RESET": SubResource("Animation_sctlq"),
+"fire": SubResource("Animation_83vil")
+}
+
+[node name="world" type="Node2D"]
+y_sort_enabled = true
+
+[node name="NodeSpawner" type="Node" parent="."]
+script = ExtResource("1_vi8mo")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+
+[node name="PortalPlaceholder" type="Sprite2D" parent="."]
+y_sort_enabled = true
+position = Vector2(0, -74)
+scale = Vector2(2, 2)
+texture = ExtResource("7_6cwah")
+
+[node name="player" type="CharacterBody2D" parent="."]
+y_sort_enabled = true
+script = ExtResource("1_0ehn0")
+
+[node name="vfx" type="Node2D" parent="player"]
+
+[node name="CharacterSpacer" type="Sprite2D" parent="player/vfx"]
+texture = ExtResource("1_t0wtj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player"]
+shape = SubResource("CircleShape2D_n5rv6")
+
+[node name="Weapon" type="Node2D" parent="player" node_paths=PackedStringArray("vfxNode", "projectileSpawnPos")]
+script = ExtResource("3_bdb65")
+projectileType = ExtResource("5_wmnd2")
+vfxNode = NodePath("Pivot")
+projectileSpawnPos = NodePath("Pivot/projSpawn")
+
+[node name="Pivot" type="Node2D" parent="player/Weapon"]
+
+[node name="projSpawn" type="Node2D" parent="player/Weapon/Pivot"]
+position = Vector2(11, -0.5)
+
+[node name="vfx" type="Node2D" parent="player/Weapon/Pivot"]
+position = Vector2(3, -1)
+
+[node name="GunModern" type="Sprite2D" parent="player/Weapon/Pivot/vfx"]
+texture = ExtResource("2_i1ng7")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="player/Weapon"]
+libraries = {
+"": SubResource("AnimationLibrary_0n000")
+}
+
+[node name="EnemyPlaceholder" type="Sprite2D" parent="."]
+position = Vector2(77, -9)
+texture = ExtResource("8_uab2f")
