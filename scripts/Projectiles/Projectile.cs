@@ -9,6 +9,9 @@ public partial class Projectile : Area2D
     [Export]
     private float speed;
 
+    // Temp
+    public float Damage = 10;
+
     private Vector2 direction;
     public Vector2 Direction { get{ return direction;} set{direction=value;} }
 

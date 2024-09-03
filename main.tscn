@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b8wfqpwengt6d"]
+[gd_scene load_steps=16 format=3 uid="uid://b8wfqpwengt6d"]
 
 [ext_resource type="Script" path="res://scripts/player/PlayerController.cs" id="1_0ehn0"]
 [ext_resource type="Texture2D" uid="uid://dvsamywlr2hft" path="res://assets/character_spacer.png" id="1_t0wtj"]
@@ -8,6 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://c8aeqoxdlql7p" path="res://Scenes/Projectiles/bullet_base.tscn" id="5_wmnd2"]
 [ext_resource type="Texture2D" uid="uid://dt0tw6vft6xa2" path="res://assets/portal_placeholder.png" id="7_6cwah"]
 [ext_resource type="Texture2D" uid="uid://daeir7u5q74oe" path="res://assets/enemy_placeholder.png" id="8_uab2f"]
+[ext_resource type="PackedScene" uid="uid://doewn8d64ry0b" path="res://Scenes/Components/HealthComponent.tscn" id="9_58s2v"]
+[ext_resource type="PackedScene" uid="uid://c0vn4c5bukp2i" path="res://Scenes/Components/HurtboxComponent.tscn" id="9_hsrsy"]
+[ext_resource type="Script" path="res://scripts/Debug/Testing/HealthCompTest.cs" id="9_t8b28"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n5rv6"]
 radius = 7.0
@@ -102,3 +105,12 @@ libraries = {
 [node name="EnemyPlaceholder" type="Sprite2D" parent="."]
 position = Vector2(77, -9)
 texture = ExtResource("8_uab2f")
+
+[node name="HealthCompTest" type="Node" parent="EnemyPlaceholder" node_paths=PackedStringArray("myHC")]
+script = ExtResource("9_t8b28")
+myHC = NodePath("../HealthComponent")
+
+[node name="HealthComponent" parent="EnemyPlaceholder" instance=ExtResource("9_58s2v")]
+
+[node name="HurtboxComponent" parent="EnemyPlaceholder" node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("9_hsrsy")]
+myHealthComponent = NodePath("../HealthComponent")
