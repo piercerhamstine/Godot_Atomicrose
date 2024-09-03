@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bh3vbkmrlgq5o"]
+
+[ext_resource type="Script" path="res://scripts/Effects/passive/AttackSpeedPassive.cs" id="1_iel8r"]
+
+[node name="AttackSpeedPassive" type="Node"]
+script = ExtResource("1_iel8r")
+modifierValue = 1.0

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://drbbbjgvcptlw"]
+
+[ext_resource type="Script" path="res://scripts/Fragments/Fragment.cs" id="1_g1qq0"]
+[ext_resource type="PackedScene" uid="uid://bh3vbkmrlgq5o" path="res://Scenes/Effects/Passive/AttackSpeedPassive.tscn" id="2_icujb"]
+
+[node name="BigRev" type="Node" node_paths=PackedStringArray("passives")]
+script = ExtResource("1_g1qq0")
+passives = NodePath("Passives")
+
+[node name="Passives" type="Node" parent="."]
+
+[node name="AttackSpeedPassive" parent="Passives" instance=ExtResource("2_icujb")]
+modifierValue = 5.0
+modifierType = 1

@@ -9,9 +9,13 @@ public partial class NodeSpawner : Node
         Instance = this;
 	}
 
-    public Node SpawnNode(PackedScene scene){
+    public Node SpawnNode(PackedScene scene, Node parent = null){
         var newEntity = scene.Instantiate();
-        GetTree().CurrentScene.AddChild(newEntity);
+        if(parent == null)
+            GetTree().CurrentScene.AddChild(newEntity);
+        else
+            parent.AddChild(newEntity);
+            
         return newEntity;
     }
 }
