@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ceui737exvniu"]
+
+[ext_resource type="Script" path="res://scripts/Components/TargetPathingComponent.cs" id="1_upxtp"]
+
+[node name="TargetPathingComponent" type="Node2D"]
+script = ExtResource("1_upxtp")

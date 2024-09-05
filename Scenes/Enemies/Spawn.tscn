@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://dtdgece4r2bbs"]
+
+[ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="1_eho7i"]
+[ext_resource type="Script" path="res://scripts/Enemies/Spawn.cs" id="1_g3v5k"]
+[ext_resource type="Texture2D" uid="uid://daeir7u5q74oe" path="res://assets/enemy_placeholder.png" id="1_n60j1"]
+[ext_resource type="PackedScene" uid="uid://c0vn4c5bukp2i" path="res://Scenes/Components/HurtboxComponent.tscn" id="2_2paaj"]
+[ext_resource type="PackedScene" uid="uid://blqckn8g1f2fs" path="res://Scenes/Components/VelocityComponent.tscn" id="2_5ab1i"]
+[ext_resource type="PackedScene" uid="uid://ceui737exvniu" path="res://Scenes/Components/TargetPathingComponent.tscn" id="3_p34lv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b5w5i"]
+
+[node name="Spawn" type="CharacterBody2D" node_paths=PackedStringArray("myHealthComponent", "myVelocityComponent", "myTargetPathingComponent", "moveCoolDown")]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_g3v5k")
+myHealthComponent = NodePath("HealthComponent")
+myVelocityComponent = NodePath("VelocityComponent")
+myTargetPathingComponent = NodePath("TargetPathingComponent")
+moveCoolDown = NodePath("Timer")
+
+[node name="TargetPathingComponent" parent="." node_paths=PackedStringArray("velocityComponent", "targetUpdateDelay") instance=ExtResource("3_p34lv")]
+velocityComponent = NodePath("../VelocityComponent")
+targetUpdateDelay = NodePath("../Timer")
+
+[node name="VelocityComponent" parent="." instance=ExtResource("2_5ab1i")]
+MaxSpeed = 100.0
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("1_eho7i")
+MaxHealth = 30.0
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("2_2paaj")]
+myHealthComponent = NodePath("../HealthComponent")
+
+[node name="visuals" type="Node2D" parent="."]
+
+[node name="EnemyPlaceholder" type="Sprite2D" parent="visuals"]
+texture = ExtResource("1_n60j1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_b5w5i")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true

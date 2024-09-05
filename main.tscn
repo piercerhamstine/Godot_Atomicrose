@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://b8wfqpwengt6d"]
+[gd_scene load_steps=22 format=4 uid="uid://b8wfqpwengt6d"]
 
 [ext_resource type="Script" path="res://scripts/player/PlayerController.cs" id="1_0ehn0"]
 [ext_resource type="Texture2D" uid="uid://c3by8c45o1nw1" path="res://assets/floor_placeholder.png" id="1_sqji1"]
@@ -12,10 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://c8aeqoxdlql7p" path="res://Scenes/Projectiles/bullet_base.tscn" id="5_wmnd2"]
 [ext_resource type="Texture2D" uid="uid://dt0tw6vft6xa2" path="res://assets/portal_placeholder.png" id="7_6cwah"]
 [ext_resource type="Script" path="res://scripts/player/PlayerFragments.cs" id="7_x030c"]
-[ext_resource type="Texture2D" uid="uid://daeir7u5q74oe" path="res://assets/enemy_placeholder.png" id="8_uab2f"]
-[ext_resource type="PackedScene" uid="uid://doewn8d64ry0b" path="res://Scenes/Components/HealthComponent.tscn" id="9_58s2v"]
-[ext_resource type="PackedScene" uid="uid://c0vn4c5bukp2i" path="res://Scenes/Components/HurtboxComponent.tscn" id="9_hsrsy"]
-[ext_resource type="Script" path="res://scripts/Debug/Testing/HealthCompTest.cs" id="9_t8b28"]
+[ext_resource type="PackedScene" uid="uid://dtdgece4r2bbs" path="res://Scenes/Enemies/Spawn.tscn" id="14_pskcu"]
 [ext_resource type="PackedScene" uid="uid://b4ybcf7r3vvrd" path="res://Scenes/Fragments/Pickups/BigRevPickUp.tscn" id="16_fq70l"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6p5mf"]
@@ -87,6 +84,9 @@ y_sort_origin = -1
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(3, 3)
 
+[node name="Spawn" parent="." instance=ExtResource("14_pskcu")]
+position = Vector2(157, 0)
+
 [node name="player" type="CharacterBody2D" parent="."]
 y_sort_enabled = true
 motion_mode = 1
@@ -95,8 +95,9 @@ script = ExtResource("1_0ehn0")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player"]
 shape = SubResource("CircleShape2D_n5rv6")
 
-[node name="PlayerManager" type="Node" parent="player" node_paths=PackedStringArray("playerStats", "playerFragments")]
+[node name="PlayerManager" type="Node" parent="player" node_paths=PackedStringArray("playerController", "playerStats", "playerFragments")]
 script = ExtResource("4_nir8h")
+playerController = NodePath("..")
 playerStats = NodePath("PlayerStats")
 playerFragments = NodePath("PlayerFragments")
 
@@ -137,19 +138,6 @@ texture = ExtResource("2_i1ng7")
 libraries = {
 "": SubResource("AnimationLibrary_0n000")
 }
-
-[node name="EnemyPlaceholder" type="Sprite2D" parent="."]
-position = Vector2(77, -9)
-texture = ExtResource("8_uab2f")
-
-[node name="HealthCompTest" type="Node" parent="EnemyPlaceholder" node_paths=PackedStringArray("myHC")]
-script = ExtResource("9_t8b28")
-myHC = NodePath("../HealthComponent")
-
-[node name="HealthComponent" parent="EnemyPlaceholder" instance=ExtResource("9_58s2v")]
-
-[node name="HurtboxComponent" parent="EnemyPlaceholder" node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("9_hsrsy")]
-myHealthComponent = NodePath("../HealthComponent")
 
 [node name="Portal" type="Area2D" parent="."]
 position = Vector2(0, -74)

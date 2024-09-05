@@ -9,6 +9,8 @@ public partial class PlayerManager : Node
     public static PlayerManager Instance;
 
     [Export]
+    public PlayerController playerController;
+    [Export]
     public PlayerStats playerStats;
     [Export]
     public PlayerFragments playerFragments;
