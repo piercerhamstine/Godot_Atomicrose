@@ -11,38 +11,32 @@ public partial class TargetPathingComponent : Node2D
 
     private Vector2 currentTargetPosition;
     private Vector2 previousTargetPosition;
+    private Vector2 direction;
 
-    bool reachedTarget;
-
-    // TODO: Fix this
     public void SetTargetPosition(Vector2 targetPosition){
         if(!targetUpdateDelay.IsStopped()){
             return;
         }
 
         GD.Print("Position Updated");
+        targetUpdateDelay.Call("start");
         previousTargetPosition = currentTargetPosition;
         currentTargetPosition = targetPosition;
-        reachedTarget = false;
-        targetUpdateDelay.Start();
     }
 
+    // TODO: Fix this, small chance to get stuck moving between positive and neg direction
     // Follows target until reaching the target
-    public void FollowTarget(float distToStop = 0.2f){
-        if(reachedTarget){
+    public void FollowTarget(float distToStop = 0.5f){
+        if(GlobalPosition.DistanceSquaredTo(currentTargetPosition) <= distToStop){
             velocityComponent.Direction = Vector2.Zero;
             return;
         }
 
-        Vector2 direction = (currentTargetPosition - GlobalPosition).Normalized();
+        direction = (currentTargetPosition - GlobalPosition).Normalized();
         velocityComponent.Direction = direction;
-
-        if(GlobalPosition.DistanceTo(currentTargetPosition) <= distToStop)
-            reachedTarget = true;
     }
 
     // Follows the direction of the target without stopping.
     public void FollowTargetDirection(){
-
     }
 }
