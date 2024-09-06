@@ -2,19 +2,38 @@ using Godot;
 using System;
 
 namespace AtomicRose.Components;
+
+public partial class HealthChangeResult:Resource{
+    public float PreviousHealth;
+    public float CurrentHealth;
+    public bool WasHealed;
+}
+
 public partial class HealthComponent : Node
 {
     [Signal]
     public delegate void DeathEventHandler();
 	
+    [Signal]
+    public delegate void OnHealthChangedEventHandler(HealthChangeResult hpChangeResult);
+
+    private float previousHealth;
     private float currentHealth;
     private float maxHealth;
 
     public float CurrentHealth{
         get => currentHealth;
         private set{
+            previousHealth = currentHealth;
             currentHealth = Mathf.Clamp(value, 0, maxHealth);
 
+            HealthChangeResult hpcr = new HealthChangeResult{
+                PreviousHealth = previousHealth,
+                CurrentHealth = currentHealth,
+                WasHealed = currentHealth > previousHealth
+            };
+            
+            EmitSignal(SignalName.OnHealthChanged, hpcr);
             if(!IsLiving){
                 EmitSignal(SignalName.Death);
             }

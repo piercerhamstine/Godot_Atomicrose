@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://b8wfqpwengt6d"]
+[gd_scene load_steps=30 format=4 uid="uid://b8wfqpwengt6d"]
 
 [ext_resource type="Script" path="res://scripts/player/PlayerController.cs" id="1_0ehn0"]
 [ext_resource type="Texture2D" uid="uid://c3by8c45o1nw1" path="res://assets/floor_placeholder.png" id="1_sqji1"]
@@ -10,8 +10,12 @@
 [ext_resource type="Script" path="res://scripts/Managers/PlayerManager.cs" id="4_nir8h"]
 [ext_resource type="Script" path="res://scripts/player/PlayerStats.cs" id="5_bko7q"]
 [ext_resource type="PackedScene" uid="uid://c8aeqoxdlql7p" path="res://Scenes/Projectiles/bullet_base.tscn" id="5_wmnd2"]
+[ext_resource type="PackedScene" uid="uid://doewn8d64ry0b" path="res://Scenes/Components/HealthComponent.tscn" id="6_ah8oj"]
+[ext_resource type="PackedScene" uid="uid://c0vn4c5bukp2i" path="res://Scenes/Components/HurtboxComponent.tscn" id="7_0iesr"]
 [ext_resource type="Texture2D" uid="uid://dt0tw6vft6xa2" path="res://assets/portal_placeholder.png" id="7_6cwah"]
 [ext_resource type="Script" path="res://scripts/player/PlayerFragments.cs" id="7_x030c"]
+[ext_resource type="Script" path="res://scripts/Components/HitflashComponent.cs" id="9_bylex"]
+[ext_resource type="Shader" uid="uid://qvs68cmqrmjt" path="res://hitflash.tres" id="9_yt5o1"]
 [ext_resource type="PackedScene" uid="uid://dtdgece4r2bbs" path="res://Scenes/Enemies/Spawn.tscn" id="14_pskcu"]
 [ext_resource type="PackedScene" uid="uid://b4ybcf7r3vvrd" path="res://Scenes/Fragments/Pickups/BigRevPickUp.tscn" id="16_fq70l"]
 
@@ -22,8 +26,47 @@ texture = ExtResource("1_sqji1")
 [sub_resource type="TileSet" id="TileSet_2uo2w"]
 sources/0 = SubResource("TileSetAtlasSource_6p5mf")
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_n5rv6"]
-radius = 7.0
+[sub_resource type="Animation" id="Animation_qkp6t"]
+resource_name = "hit_flash"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitFlash/Visuals:material:shader_parameter/enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_28e1n"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitFlash/Visuals:material:shader_parameter/enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rak32"]
+_data = {
+"RESET": SubResource("Animation_28e1n"),
+"hit_flash": SubResource("Animation_qkp6t")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mgla0"]
+shader = ExtResource("9_yt5o1")
+shader_parameter/enabled = false
+shader_parameter/tint = Color(1, 1, 1, 1)
 
 [sub_resource type="Animation" id="Animation_sctlq"]
 length = 0.001
@@ -63,6 +106,9 @@ _data = {
 "fire": SubResource("Animation_83vil")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_n5rv6"]
+radius = 7.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y6cps"]
 size = Vector2(34, 66)
 
@@ -92,9 +138,6 @@ y_sort_enabled = true
 motion_mode = 1
 script = ExtResource("1_0ehn0")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="player"]
-shape = SubResource("CircleShape2D_n5rv6")
-
 [node name="PlayerManager" type="Node" parent="player" node_paths=PackedStringArray("playerController", "playerStats", "playerFragments")]
 script = ExtResource("4_nir8h")
 playerController = NodePath("..")
@@ -107,12 +150,31 @@ script = ExtResource("5_bko7q")
 [node name="PlayerFragments" type="Node" parent="player/PlayerManager"]
 script = ExtResource("7_x030c")
 
-[node name="vfx" type="Node2D" parent="player"]
+[node name="HealthComponent" parent="player" instance=ExtResource("6_ah8oj")]
 
-[node name="CharacterSpacer" type="Sprite2D" parent="player/vfx"]
+[node name="HurtboxComponent" parent="player" node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("7_0iesr")]
+myHealthComponent = NodePath("../HealthComponent")
+
+[node name="HitFlash" type="CanvasGroup" parent="player" node_paths=PackedStringArray("animationPlayer", "myHealthComponent")]
+script = ExtResource("9_bylex")
+animationPlayer = NodePath("HitflashAnim")
+myHealthComponent = NodePath("../HealthComponent")
+
+[node name="HitflashAnim" type="AnimationPlayer" parent="player/HitFlash"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_rak32")
+}
+
+[node name="Visuals" type="Node2D" parent="player/HitFlash"]
+material = SubResource("ShaderMaterial_mgla0")
+
+[node name="CharacterSpacer" type="Sprite2D" parent="player/HitFlash/Visuals"]
+use_parent_material = true
 texture = ExtResource("1_t0wtj")
 
-[node name="Weapon" type="Node2D" parent="player" node_paths=PackedStringArray("vfxNode", "projectileSpawnPos", "attackTimer")]
+[node name="Weapon" type="Node2D" parent="player/HitFlash/Visuals" node_paths=PackedStringArray("vfxNode", "projectileSpawnPos", "attackTimer")]
+use_parent_material = true
 position = Vector2(4, 0)
 script = ExtResource("3_bdb65")
 projectileType = ExtResource("5_wmnd2")
@@ -120,24 +182,30 @@ vfxNode = NodePath("Pivot")
 projectileSpawnPos = NodePath("Pivot/Marker2D")
 attackTimer = NodePath("Timer")
 
-[node name="Timer" type="Timer" parent="player/Weapon"]
+[node name="Timer" type="Timer" parent="player/HitFlash/Visuals/Weapon"]
 wait_time = 0.5
 one_shot = true
 
-[node name="Pivot" type="Node2D" parent="player/Weapon"]
+[node name="Pivot" type="Node2D" parent="player/HitFlash/Visuals/Weapon"]
+use_parent_material = true
 
-[node name="Marker2D" type="Marker2D" parent="player/Weapon/Pivot"]
+[node name="Marker2D" type="Marker2D" parent="player/HitFlash/Visuals/Weapon/Pivot"]
 position = Vector2(12, -0.5)
 
-[node name="vfx" type="Node2D" parent="player/Weapon/Pivot"]
+[node name="vfx" type="Node2D" parent="player/HitFlash/Visuals/Weapon/Pivot"]
+use_parent_material = true
 
-[node name="GunModern" type="Sprite2D" parent="player/Weapon/Pivot/vfx"]
+[node name="GunModern" type="Sprite2D" parent="player/HitFlash/Visuals/Weapon/Pivot/vfx"]
+use_parent_material = true
 texture = ExtResource("2_i1ng7")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="player/Weapon"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="player/HitFlash/Visuals/Weapon"]
 libraries = {
 "": SubResource("AnimationLibrary_0n000")
 }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player"]
+shape = SubResource("CircleShape2D_n5rv6")
 
 [node name="Portal" type="Area2D" parent="."]
 position = Vector2(0, -74)
