@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://b2weeeimd8e50"]
+
+[ext_resource type="Shader" uid="uid://qvs68cmqrmjt" path="res://hitflash.tres" id="1_8ofam"]
+[ext_resource type="Script" path="res://scripts/Components/HitflashComponent.cs" id="2_knuyp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t75q7"]
+resource_local_to_scene = true
+shader = ExtResource("1_8ofam")
+shader_parameter/enabled = false
+shader_parameter/tint = Color(1, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_p6gol"]
+resource_name = "hit_flash"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_35nik"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_56cf4"]
+_data = {
+"RESET": SubResource("Animation_35nik"),
+"hit_flash": SubResource("Animation_p6gol")
+}
+
+[node name="HitflashComponent" type="Node2D" node_paths=PackedStringArray("animationPlayer")]
+material = SubResource("ShaderMaterial_t75q7")
+script = ExtResource("2_knuyp")
+animationPlayer = NodePath("hitflashAnimationPlayer")
+
+[node name="hitflashAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_56cf4")
+}

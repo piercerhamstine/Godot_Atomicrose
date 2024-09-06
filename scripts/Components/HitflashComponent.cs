@@ -3,7 +3,7 @@ using Godot;
 using System;
 
 namespace AtomicRose.Components;
-public partial class HitflashComponent : CanvasGroup
+public partial class HitflashComponent : Node2D
 {
     [Export]
     AnimationPlayer animationPlayer;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dtdgece4r2bbs"]
+[gd_scene load_steps=11 format=3 uid="uid://dtdgece4r2bbs"]
 
 [ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="1_eho7i"]
 [ext_resource type="Script" path="res://scripts/Enemies/Spawn.cs" id="1_g3v5k"]
@@ -6,6 +6,14 @@
 [ext_resource type="PackedScene" uid="uid://c0vn4c5bukp2i" path="res://Scenes/Components/HurtboxComponent.tscn" id="2_2paaj"]
 [ext_resource type="PackedScene" uid="uid://blqckn8g1f2fs" path="res://Scenes/Components/VelocityComponent.tscn" id="2_5ab1i"]
 [ext_resource type="PackedScene" uid="uid://ceui737exvniu" path="res://Scenes/Components/TargetPathingComponent.tscn" id="3_p34lv"]
+[ext_resource type="PackedScene" uid="uid://b2weeeimd8e50" path="res://Scenes/Components/HitflashComponent.tscn" id="5_sbeob"]
+[ext_resource type="Shader" uid="uid://qvs68cmqrmjt" path="res://hitflash.tres" id="6_w86k5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iwitp"]
+resource_local_to_scene = true
+shader = ExtResource("6_w86k5")
+shader_parameter/enabled = false
+shader_parameter/tint = Color(1, 1, 1, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b5w5i"]
 
@@ -29,13 +37,19 @@ MaxSpeed = 200.0
 script = ExtResource("1_eho7i")
 MaxHealth = 30.0
 
-[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("2_2paaj")]
+[node name="HitflashComponent" parent="." node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("5_sbeob")]
+material = SubResource("ShaderMaterial_iwitp")
 myHealthComponent = NodePath("../HealthComponent")
 
-[node name="visuals" type="Node2D" parent="."]
+[node name="visuals" type="Node2D" parent="HitflashComponent"]
+use_parent_material = true
 
-[node name="EnemyPlaceholder" type="Sprite2D" parent="visuals"]
+[node name="EnemyPlaceholder" type="Sprite2D" parent="HitflashComponent/visuals"]
+use_parent_material = true
 texture = ExtResource("1_n60j1")
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("2_2paaj")]
+myHealthComponent = NodePath("../HealthComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_b5w5i")
