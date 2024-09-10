@@ -22,6 +22,9 @@ public partial class Spawn : CharacterBody2D
 
         stateMachine.AddState(PathToPlayerState);
         stateMachine.SetInitialState(PathToPlayerState);
+
+        RandomNumberGenerator rng = new RandomNumberGenerator();
+        myTargetPathingComponent.SetUpdateDelay(rng.RandfRange(1.0f, 4.0f));
     }
 
     public override void _Process(double delta)

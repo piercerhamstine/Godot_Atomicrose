@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=4 uid="uid://b8wfqpwengt6d"]
+[gd_scene load_steps=29 format=4 uid="uid://b8wfqpwengt6d"]
 
 [ext_resource type="Script" path="res://scripts/player/PlayerController.cs" id="1_0ehn0"]
 [ext_resource type="Texture2D" uid="uid://c3by8c45o1nw1" path="res://assets/floor_placeholder.png" id="1_sqji1"]
@@ -11,10 +11,10 @@
 [ext_resource type="Script" path="res://scripts/player/PlayerStats.cs" id="5_bko7q"]
 [ext_resource type="PackedScene" uid="uid://c8aeqoxdlql7p" path="res://Scenes/Projectiles/bullet_base.tscn" id="5_wmnd2"]
 [ext_resource type="PackedScene" uid="uid://doewn8d64ry0b" path="res://Scenes/Components/HealthComponent.tscn" id="6_ah8oj"]
-[ext_resource type="PackedScene" uid="uid://c0vn4c5bukp2i" path="res://Scenes/Components/HurtboxComponent.tscn" id="7_0iesr"]
 [ext_resource type="Texture2D" uid="uid://dt0tw6vft6xa2" path="res://assets/portal_placeholder.png" id="7_6cwah"]
 [ext_resource type="Script" path="res://scripts/player/PlayerFragments.cs" id="7_x030c"]
 [ext_resource type="Shader" uid="uid://qvs68cmqrmjt" path="res://hitflash.tres" id="9_yt5o1"]
+[ext_resource type="Script" path="res://scripts/Components/HurtboxComponent.cs" id="10_i3wyu"]
 [ext_resource type="PackedScene" uid="uid://b2weeeimd8e50" path="res://Scenes/Components/HitflashComponent.tscn" id="11_ywqxs"]
 [ext_resource type="PackedScene" uid="uid://dtdgece4r2bbs" path="res://Scenes/Enemies/Spawn.tscn" id="14_pskcu"]
 [ext_resource type="PackedScene" uid="uid://b4ybcf7r3vvrd" path="res://Scenes/Fragments/Pickups/BigRevPickUp.tscn" id="16_fq70l"]
@@ -25,6 +25,8 @@ texture = ExtResource("1_sqji1")
 
 [sub_resource type="TileSet" id="TileSet_2uo2w"]
 sources/0 = SubResource("TileSetAtlasSource_6p5mf")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4gy5o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0p3b0"]
 resource_local_to_scene = true
@@ -121,10 +123,13 @@ script = ExtResource("7_x030c")
 
 [node name="HealthComponent" parent="player" instance=ExtResource("6_ah8oj")]
 
-[node name="HurtboxComponent" parent="player" node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("7_0iesr")]
-collision_layer = 0
-collision_mask = 0
+[node name="HurtboxComponent" type="Area2D" parent="player" node_paths=PackedStringArray("myHealthComponent")]
+collision_mask = 2
+script = ExtResource("10_i3wyu")
 myHealthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player/HurtboxComponent"]
+shape = SubResource("CircleShape2D_4gy5o")
 
 [node name="HitflashComponent" parent="player" node_paths=PackedStringArray("myHealthComponent") instance=ExtResource("11_ywqxs")]
 material = SubResource("ShaderMaterial_0p3b0")
@@ -185,3 +190,18 @@ shape = SubResource("RectangleShape2D_y6cps")
 
 [node name="BigRev" parent="." instance=ExtResource("16_fq70l")]
 position = Vector2(38, 21)
+
+[node name="Spawn2" parent="." instance=ExtResource("14_pskcu")]
+position = Vector2(-152, 44)
+
+[node name="Spawn3" parent="." instance=ExtResource("14_pskcu")]
+position = Vector2(-176, -95)
+
+[node name="Spawn4" parent="." instance=ExtResource("14_pskcu")]
+position = Vector2(-54, -135)
+
+[node name="Spawn5" parent="." instance=ExtResource("14_pskcu")]
+position = Vector2(169, -134)
+
+[node name="Spawn6" parent="." instance=ExtResource("14_pskcu")]
+position = Vector2(171, 75)

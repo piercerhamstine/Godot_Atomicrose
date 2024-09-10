@@ -1,13 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://dtdgece4r2bbs"]
+[gd_scene load_steps=13 format=3 uid="uid://dtdgece4r2bbs"]
 
 [ext_resource type="Script" path="res://scripts/Components/HealthComponent.cs" id="1_eho7i"]
 [ext_resource type="Script" path="res://scripts/Enemies/Spawn.cs" id="1_g3v5k"]
 [ext_resource type="Texture2D" uid="uid://daeir7u5q74oe" path="res://assets/enemy_placeholder.png" id="1_n60j1"]
 [ext_resource type="PackedScene" uid="uid://c0vn4c5bukp2i" path="res://Scenes/Components/HurtboxComponent.tscn" id="2_2paaj"]
 [ext_resource type="PackedScene" uid="uid://blqckn8g1f2fs" path="res://Scenes/Components/VelocityComponent.tscn" id="2_5ab1i"]
+[ext_resource type="Script" path="res://scripts/Components/HitboxComponent.cs" id="2_i3r7m"]
 [ext_resource type="PackedScene" uid="uid://ceui737exvniu" path="res://Scenes/Components/TargetPathingComponent.tscn" id="3_p34lv"]
 [ext_resource type="PackedScene" uid="uid://b2weeeimd8e50" path="res://Scenes/Components/HitflashComponent.tscn" id="5_sbeob"]
 [ext_resource type="Shader" uid="uid://qvs68cmqrmjt" path="res://hitflash.tres" id="6_w86k5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sd02x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iwitp"]
 resource_local_to_scene = true
@@ -25,6 +28,14 @@ myHealthComponent = NodePath("HealthComponent")
 myVelocityComponent = NodePath("VelocityComponent")
 myTargetPathingComponent = NodePath("TargetPathingComponent")
 moveCoolDown = NodePath("Timer")
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2_i3r7m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("CircleShape2D_sd02x")
 
 [node name="TargetPathingComponent" parent="." node_paths=PackedStringArray("velocityComponent", "targetUpdateDelay") instance=ExtResource("3_p34lv")]
 velocityComponent = NodePath("../VelocityComponent")

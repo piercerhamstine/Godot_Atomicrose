@@ -13,6 +13,10 @@ public partial class TargetPathingComponent : Node2D
     private Vector2 previousTargetPosition;
     private Vector2 direction;
 
+    public void SetUpdateDelay(float time){
+        targetUpdateDelay.WaitTime = time;
+    }
+
     public void SetTargetPosition(Vector2 targetPosition){
         if(!targetUpdateDelay.IsStopped()){
             return;
