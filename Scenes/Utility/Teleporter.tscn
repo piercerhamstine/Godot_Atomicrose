@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://dacxucxnpkec3"]
+
+[node name="Teleporter" type="Node2D"]

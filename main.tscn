@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://b8wfqpwengt6d"]
+[gd_scene load_steps=35 format=4 uid="uid://b8wfqpwengt6d"]
 
 [ext_resource type="Script" path="res://scripts/player/PlayerController.cs" id="1_0ehn0"]
 [ext_resource type="Texture2D" uid="uid://c3by8c45o1nw1" path="res://assets/floor_placeholder.png" id="1_sqji1"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b6qlmc2dn7kkl" path="res://assets/gun_modern.png" id="2_i1ng7"]
 [ext_resource type="Script" path="res://scripts/Managers/GlobalTriggerManager.cs" id="2_ofbvv"]
 [ext_resource type="Script" path="res://scripts/Weapons/Gun.cs" id="3_bdb65"]
+[ext_resource type="Texture2D" uid="uid://dn0jv2jso8847" path="res://assets/placeholder_room_tileset.png" id="4_hlbi0"]
 [ext_resource type="Script" path="res://scripts/Managers/PlayerManager.cs" id="4_nir8h"]
 [ext_resource type="Script" path="res://scripts/player/PlayerStats.cs" id="5_bko7q"]
 [ext_resource type="PackedScene" uid="uid://c8aeqoxdlql7p" path="res://Scenes/Projectiles/bullet_base.tscn" id="5_wmnd2"]
@@ -16,7 +17,6 @@
 [ext_resource type="Shader" uid="uid://qvs68cmqrmjt" path="res://hitflash.tres" id="9_yt5o1"]
 [ext_resource type="Script" path="res://scripts/Components/HurtboxComponent.cs" id="10_i3wyu"]
 [ext_resource type="PackedScene" uid="uid://b2weeeimd8e50" path="res://Scenes/Components/HitflashComponent.tscn" id="11_ywqxs"]
-[ext_resource type="PackedScene" uid="uid://dtdgece4r2bbs" path="res://Scenes/Enemies/Spawn.tscn" id="14_pskcu"]
 [ext_resource type="PackedScene" uid="uid://b4ybcf7r3vvrd" path="res://Scenes/Fragments/Pickups/BigRevPickUp.tscn" id="16_fq70l"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6p5mf"]
@@ -25,6 +25,44 @@ texture = ExtResource("1_sqji1")
 
 [sub_resource type="TileSet" id="TileSet_2uo2w"]
 sources/0 = SubResource("TileSetAtlasSource_6p5mf")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s0q1i"]
+texture = ExtResource("4_hlbi0")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+5:0/0 = 0
+7:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+5:1/0 = 0
+7:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_36ywh"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_s0q1i")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y8m06"]
+size = Vector2(352, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fft4v"]
+size = Vector2(352, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t5xfv"]
+size = Vector2(32, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e0qiw"]
+size = Vector2(334, 20)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4gy5o"]
 
@@ -98,16 +136,42 @@ tile_map_data = PackedByteArray("AADu/+7/AAAAAAAAAADu/+//AAAAAAAAAADu//D/AAAAAAA
 tile_set = SubResource("TileSet_2uo2w")
 y_sort_origin = -1
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(3, 3)
+[node name="room" type="TileMapLayer" parent="."]
+z_index = -1
+tile_map_data = PackedByteArray("AAD+/8n/AAAAAAEAAAD//8n/AAAAAAEAAAAAAMn/AAAAAAEAAAABAMn/AAAAAAEAAAD+/8r/AAAAAAEAAAD//8r/AAAAAAEAAAAAAMr/AAAAAAEAAAABAMr/AAABAAEAAAABAMv/AAAAAAEAAAAAAMv/AAAAAAEAAAD//8v/AAAAAAEAAAD+/8v/AAABAAEAAAD9/8r/AAABAAEAAAACAMr/AAAAAAEAAAACAMv/AAABAAEAAAACAMz/AAAAAAEAAAACAM3/AAABAAEAAAACAM7/AAAAAAEAAAACAM//AAAAAAEAAAABAM//AAABAAEAAAAAAM//AAAAAAEAAAD//8//AAAAAAEAAAD+/8//AAABAAEAAAD9/8//AAAAAAEAAAD9/87/AAAAAAEAAAD9/83/AAABAAEAAAD9/8z/AAAAAAEAAAD9/8v/AAAAAAEAAAD//8z/AAAAAAEAAAAAAMz/AAABAAEAAAAAAM3/AAAAAAEAAAAAAM7/AAAAAAEAAAD//87/AAAAAAEAAAD+/87/AAAAAAEAAAD+/83/AAAAAAEAAAD+/8z/AAAAAAEAAAABAM3/AAAAAAEAAAABAM7/AAABAAEAAAD//83/AAABAAEAAAABAMz/AAAAAAEAAAD9/8n/AAAAAAEAAAACAMn/AAAAAAEAAAD8/8r/AAAAAAEAAAD8/8v/AAAAAAEAAAD8/8z/AAAAAAEAAAD8/83/AAAAAAEAAAD8/87/AAAAAAEAAAD8/8//AAAAAAEAAAD9/9D/AAAAAAEAAAD//9D/AAAAAAEAAAD+/9D/AAAAAAEAAAAAAND/AAAAAAEAAAABAND/AAAAAAEAAAACAND/AAAAAAEAAAD8/8n/AAAAAAEAAAADAMn/AAAAAAEAAAADAMr/AAAAAAEAAAADAMv/AAAAAAEAAAADAMz/AAAAAAEAAAADAM3/AAAAAAEAAAADAM7/AAAAAAEAAAADAM//AAAAAAEAAAD8/9D/AAAAAAEAAAADAND/AAAAAAEAAAD7/8n/AAAAAAEAAAD7/8r/AAAAAAEAAAD7/8v/AAAAAAEAAAD7/8z/AAAAAAEAAAD7/83/AAAAAAEAAAD7/87/AAAAAAEAAAD7/8//AAAAAAEAAAD7/9D/AAAAAAEAAAAEAMn/AAAAAAEAAAAEAMr/AAAAAAEAAAAEAMv/AAAAAAEAAAAEAMz/AAAAAAEAAAAEAM3/AAAAAAEAAAAEAM7/AAAAAAEAAAAEAM//AAAAAAEAAAAEAND/AAAAAAEAAAD7/9H/AAAAAAEAAAD8/9H/AAAAAAEAAAD9/9H/AAAAAAEAAAD+/9H/AAAAAAEAAAD//9H/AAAAAAEAAAAAANH/AAAAAAEAAAABANH/AAAAAAEAAAACANH/AAAAAAEAAAADANH/AAAAAAEAAAAEANH/AAAAAAEAAAD7/8j/AAAAAAEAAAD8/8j/AAAAAAEAAAD9/8j/AAAAAAEAAAD+/8j/AAAAAAEAAAD//8j/AAAAAAEAAAAAAMj/AAAAAAEAAAABAMj/AAAAAAEAAAACAMj/AAAAAAEAAAADAMj/AAAAAAEAAAAEAMj/AAAAAAEAAAD7/8f/AAAAAAAAAAD8/8f/AAAAAAAAAAD9/8f/AAAAAAAAAAD+/8f/AAAAAAAAAAD//8f/AAAAAAAAAAAAAMf/AAAAAAAAAAABAMf/AAAAAAAAAAACAMf/AAAAAAAAAAADAMf/AAAAAAAAAAAEAMf/AAAAAAAAAAD7/9L/AAABAAAAAAD8/9L/AAABAAAAAAD9/9L/AAABAAAAAAD+/9L/AAABAAAAAAD//9L/AAABAAAAAAAAANL/AAABAAAAAAABANL/AAABAAAAAAACANL/AAABAAAAAAADANL/AAABAAAAAAAEANL/AAABAAAAAAD6/9H/AAACAAAAAAD6/9D/AAACAAAAAAD6/8//AAACAAAAAAD6/87/AAACAAAAAAD6/83/AAACAAAAAAD6/8z/AAACAAAAAAD6/8v/AAACAAAAAAD6/8r/AAACAAAAAAD6/8n/AAACAAAAAAD6/8j/AAACAAAAAAD6/8f/AAACAAAAAAAFANH/AAACAAAAADAFAND/AAACAAAAADAFAM//AAACAAAAADAFAM7/AAACAAAAADAFAM3/AAACAAAAADAFAMv/AAACAAAAADAFAMz/AAACAAAAADAFAMr/AAACAAAAADAFAMn/AAACAAAAADAFAMj/AAACAAAAADAFAMf/AAACAAAAADA=")
+tile_set = SubResource("TileSet_36ywh")
+y_sort_origin = -1
 
-[node name="Spawn" parent="." instance=ExtResource("14_pskcu")]
-position = Vector2(157, 0)
+[node name="StaticBody2D" type="StaticBody2D" parent="room"]
+position = Vector2(-150, -1462)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="room/StaticBody2D"]
+position = Vector2(-20, -186)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_y8m06")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="room/StaticBody2D"]
+position = Vector2(320, -186)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_fft4v")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="room/StaticBody2D"]
+position = Vector2(150, -359)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_t5xfv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="room/StaticBody2D"]
+position = Vector2(150, 0)
+shape = SubResource("RectangleShape2D_e0qiw")
 
 [node name="player" type="CharacterBody2D" parent="."]
 y_sort_enabled = true
+position = Vector2(-2, -1640)
 motion_mode = 1
 script = ExtResource("1_0ehn0")
+
+[node name="Camera2D" type="Camera2D" parent="player"]
+zoom = Vector2(3, 3)
 
 [node name="PlayerManager" type="Node" parent="player" node_paths=PackedStringArray("playerController", "playerStats", "playerFragments")]
 script = ExtResource("4_nir8h")
@@ -190,18 +254,3 @@ shape = SubResource("RectangleShape2D_y6cps")
 
 [node name="BigRev" parent="." instance=ExtResource("16_fq70l")]
 position = Vector2(38, 21)
-
-[node name="Spawn2" parent="." instance=ExtResource("14_pskcu")]
-position = Vector2(-152, 44)
-
-[node name="Spawn3" parent="." instance=ExtResource("14_pskcu")]
-position = Vector2(-176, -95)
-
-[node name="Spawn4" parent="." instance=ExtResource("14_pskcu")]
-position = Vector2(-54, -135)
-
-[node name="Spawn5" parent="." instance=ExtResource("14_pskcu")]
-position = Vector2(169, -134)
-
-[node name="Spawn6" parent="." instance=ExtResource("14_pskcu")]
-position = Vector2(171, 75)
