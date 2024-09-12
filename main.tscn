@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=4 uid="uid://b8wfqpwengt6d"]
+[gd_scene load_steps=38 format=4 uid="uid://b8wfqpwengt6d"]
 
 [ext_resource type="Script" path="res://scripts/player/PlayerController.cs" id="1_0ehn0"]
 [ext_resource type="Texture2D" uid="uid://c3by8c45o1nw1" path="res://assets/floor_placeholder.png" id="1_sqji1"]
@@ -63,6 +63,18 @@ size = Vector2(32, 320)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0qiw"]
 size = Vector2(334, 20)
+
+[sub_resource type="Gradient" id="Gradient_egpk1"]
+offsets = PackedFloat32Array(0.111821, 0.271565, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_a3uru"]
+gradient = SubResource("Gradient_egpk1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ruadx"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_a3uru")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4gy5o"]
 
@@ -164,14 +176,16 @@ shape = SubResource("RectangleShape2D_t5xfv")
 position = Vector2(150, 0)
 shape = SubResource("RectangleShape2D_e0qiw")
 
-[node name="player" type="CharacterBody2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+
+[node name="player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("dashActiveTimer", "dashCooldownTimer", "dashParticles")]
 y_sort_enabled = true
-position = Vector2(-2, -1640)
 motion_mode = 1
 script = ExtResource("1_0ehn0")
-
-[node name="Camera2D" type="Camera2D" parent="player"]
-zoom = Vector2(3, 3)
+dashActiveTimer = NodePath("DashTimers/DashActive")
+dashCooldownTimer = NodePath("DashTimers/DashCooldown")
+dashParticles = NodePath("DashParticles")
 
 [node name="PlayerManager" type="Node" parent="player" node_paths=PackedStringArray("playerController", "playerStats", "playerFragments")]
 script = ExtResource("4_nir8h")
@@ -186,6 +200,27 @@ script = ExtResource("5_bko7q")
 script = ExtResource("7_x030c")
 
 [node name="HealthComponent" parent="player" instance=ExtResource("6_ah8oj")]
+
+[node name="DashTimers" type="Node" parent="player"]
+
+[node name="DashActive" type="Timer" parent="player/DashTimers"]
+wait_time = 0.1
+one_shot = true
+
+[node name="DashCooldown" type="Timer" parent="player/DashTimers"]
+wait_time = 0.75
+one_shot = true
+
+[node name="DashParticles" type="GPUParticles2D" parent="player"]
+emitting = false
+amount = 10
+process_material = SubResource("ParticleProcessMaterial_ruadx")
+texture = ExtResource("1_t0wtj")
+lifetime = 0.2
+one_shot = true
+preprocess = 0.05
+fixed_fps = 60
+collision_base_size = 0.0
 
 [node name="HurtboxComponent" type="Area2D" parent="player" node_paths=PackedStringArray("myHealthComponent")]
 collision_mask = 2

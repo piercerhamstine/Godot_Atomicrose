@@ -19,6 +19,12 @@ public partial class StateMachine
             currentState = state;
     }
 
+    public void ChangeState(State stateToChangeTo){
+        if(validStates.ContainsKey(stateToChangeTo.Method.Name)){
+            currentState = stateToChangeTo;
+        }
+    }
+
     public void AddState(State state){
         validStates.Add(state.Method.Name, state);
     }

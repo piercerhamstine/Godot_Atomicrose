@@ -9,18 +9,6 @@ public partial class HitflashComponent : Node2D
     AnimationPlayer animationPlayer;
     [Export]HealthComponent myHealthComponent;
 
-    private void HitTest(){
-        if(Input.IsActionJustPressed("action_dash")){
-            GD.Print("Got Input");
-            myHealthComponent.Damage(1);
-        }
-    }
-
-    public override void _Process(double delta)
-    {
-        HitTest();
-    }
-
     private void HandleHitFlash(HealthChangeResult hpcr){
         GD.Print("Health Changed");
 
